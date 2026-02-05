@@ -1,11 +1,23 @@
-// ズーム防止（ダブルタップ無効）
-document.addEventListener('touchstart', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+// ズーム防止（ダブルタップ無効化をスクロールを妨げないように記述）
+document.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 1) {
+        e.preventDefault();
+    }
+}, { passive: false });
+
 let lastTouch = 0;
 document.addEventListener('touchend', (e) => {
     const now = new Date().getTime();
-    if (now - lastTouch <= 300) e.preventDefault();
+    if (now - lastTouch <= 300) {
+        // リンクやボタン以外の場所でのダブルタップズームを防止
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'BUTTON') {
+            e.preventDefault();
+        }
+    }
     lastTouch = now;
 }, false);
+
+/* --- これより下の const SPREADSHEET_API_URL 以降は変更なし --- */
 
 const SPREADSHEET_API_URL = "https://script.google.com/macros/s/AKfycbwWEDwwO4vSFzdOkMY6NEbqIrd-DEREvKgUg5YZTFWPODvlVHsPChv5UtlMbM9u_mCD/exec";
 const D = {
@@ -123,3 +135,4 @@ function rs() {
     apply();
 }
 window.onload = it;
+

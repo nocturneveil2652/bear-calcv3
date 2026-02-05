@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>熊ダメ計算機 v3.1</title>
+    <title>熊ダメ計算機 v3.2</title>
     <style>
         :root {
             --font-main: -apple-system, "Hiragino Sans", "Helvetica Neue", sans-serif;
@@ -34,102 +34,120 @@
         html, body { height: 100%; overflow-x: hidden; -webkit-text-size-adjust: 100%; } 
         body { font-family: var(--font-main); font-size: 13px; color: var(--main-text); background: var(--bg); margin: 0; padding: 4px; transition: all 0.2s ease; }
         
-        .container { 
-            max-width: 420px; margin: auto; background: var(--container-bg); padding: 8px; 
-            border-radius: 12px; display: flex; flex-direction: column; box-sizing: border-box;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
+        .container { max-width: 400px; margin: auto; background: var(--container-bg); padding: 8px; border-radius: 12px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         
-        header { 
-            display: flex; justify-content: space-between; align-items: center;
-            min-height: 50px; border-bottom: 3px solid var(--accent); margin-bottom: 6px; padding: 0 10px; 
-            background: var(--header-bg); border-radius: 8px 8px 0 0; 
-        }
-        h1 { font-size: 1rem; margin: 0; font-weight: 800; }
-        .member-select { padding: 4px 8px; border-radius: 6px; border: 1.5px solid var(--sub-accent); background: var(--input-bg); color: var(--main-text); font-weight: bold; cursor: pointer; }
+        header { display: flex; flex-direction: column; align-items: center; min-height: 54px; border-bottom: 3px solid var(--accent); margin-bottom: 6px; padding: 4px; background: var(--header-bg); border-radius: 8px 8px 0 0; }
+        h1 { font-size: 1.1rem; margin: 0; font-weight: 800; }
+        .sub-title { font-size: 11px; color: var(--sub-accent); cursor: pointer; text-decoration: underline; font-weight: bold; margin-top: 2px; align-self: flex-end; }
 
         .section { border: 1px solid var(--border); padding: 8px; margin-bottom: 6px; border-radius: 8px; background: var(--input-bg); }
         .title { font-size: 10px; font-weight: 900; border-left: 4px solid var(--sub-accent); padding-left: 6px; display: block; margin-bottom: 6px; }
-        
-        /* 横幅を広くするためのグリッド再設計 */
+
         .grid { display: grid; grid-template-columns: 35px 65px 55px 1px 1fr 1fr; gap: 5px; align-items: center; margin-bottom: 4px; }
         .v-line { background: var(--border); width: 1px; height: 24px; justify-self: center; }
         .tag { background: var(--sub-accent); color: #fff; font-size: 10px; text-align: center; padding: 8px 0; border-radius: 5px; font-weight: 900; cursor: pointer; }
         
-        input, select { 
-            font-family: var(--font-mono); border: 1.5px solid var(--border); border-radius: 6px; 
-            height: 34px; text-align: center; font-size: 13px; width: 100%; box-sizing: border-box; 
-            background: var(--input-bg); color: var(--main-text); outline: none; 
-        }
+        input, select { font-family: var(--font-mono); border: 1.5px solid var(--border); border-radius: 6px; height: 34px; text-align: center; font-size: 14px; width: 100%; box-sizing: border-box; background: var(--input-bg); color: var(--main-text); }
+        
+        /* スライダーとボタンのレイアウト */
+        .ctrl-row { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+        .btn-s { background: var(--input-bg); border: 1.5px solid var(--sub-accent); color: var(--sub-accent); width: 34px; height: 34px; border-radius: 8px; font-weight: 900; font-size: 18px; cursor: pointer; flex-shrink: 0; }
+        .btn-s:active { background: var(--sub-accent); color: #fff; }
+        input[type="range"] { -webkit-appearance: none; background: var(--border); height: 6px; border-radius: 3px; flex: 1; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: var(--accent); border-radius: 50%; border: 2px solid #fff; }
+
+        .u-btn { background: var(--input-bg); border: 1.5px solid var(--sub-accent); padding: 5px 0; font-size: 10px; border-radius: 15px; text-align: center; color: var(--sub-accent); font-weight: 900; cursor: pointer; width: 60px; }
+        .u-btn.active { background: var(--sub-accent); color: #fff; }
 
         .res-box { border: 2.5px solid var(--accent); padding: 6px 10px; border-radius: 12px; text-align: center; margin-bottom: 8px; background: rgba(248, 187, 208, 0.05); }
-        #resDmg { font-family: var(--font-mono); font-size: 2.2rem; font-weight: 900; color: var(--dmg-color); line-height: 1.1; }
+        #resDmg { font-family: var(--font-mono); font-size: 2rem; font-weight: 900; color: var(--dmg-color); line-height: 1.1; }
 
-        .log { background: rgba(128,128,128,0.04); padding: 10px; border-radius: 8px; white-space: pre-wrap; font-family: var(--font-mono); font-size: 10px; color: var(--main-text); border: 1px solid var(--border); line-height: 1.4; text-align: left; }
-        .log-head { color: var(--sub-accent); font-weight: 900; margin: 6px 0 2px; display: block; border-bottom: 1px solid var(--border); }
+        .log { background: rgba(128,128,128,0.04); padding: 10px; border-radius: 8px; white-space: pre-wrap; font-family: var(--font-mono); font-size: 10px; color: var(--main-text); border: 1px solid var(--border); text-align: left; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>熊ダメ計算機 <span style="color:var(--accent)">v3.1</span></h1>
-        <select id="memberSelector" class="member-select" onchange="changeMember(this.value)">
-            <option value="ruby">るびぃ ed.</option>
-            <option value="junk">じゃんく ed.</option>
-        </select>
+        <h1>熊ダメ計算機 <span style="font-size: 12px; opacity: 0.6;">v3.2</span></h1>
+        <span class="sub-title" id="editionLabel" onclick="cycleMember()">るびぃedition</span>
     </header>
 
     <div class="section">
         <span class="title">兵士設定 & バフ（攻%/殺%）</span>
         <div class="grid">
             <div class="tag" onclick="tg('I')">盾</div>
-            <select id="fci" onchange="sy()"></select>
-            <select id="ti" onchange="sy()"></select>
+            <select id="fci" onchange="sy()"></select><select id="ti" onchange="sy()"></select>
             <div class="v-line"></div>
-            <input type="number" id="bAi" value="0.0" step="0.1" oninput="sy()" placeholder="攻%">
-            <input type="number" id="bKi" value="0.0" step="0.1" oninput="sy()" placeholder="殺%">
+            <input type="number" id="bAi" value="0.0" step="0.1" oninput="sy()"><input type="number" id="bKi" value="0.0" step="0.1" oninput="sy()">
         </div>
         <div class="grid">
             <div class="tag" onclick="tg('L')">槍</div>
-            <select id="fcl" onchange="sy()"></select>
-            <select id="tl" onchange="sy()"></select>
+            <select id="fcl" onchange="sy()"></select><select id="tl" onchange="sy()"></select>
             <div class="v-line"></div>
-            <input type="number" id="bAl" value="0.0" step="0.1" oninput="sy()" placeholder="攻%">
-            <input type="number" id="bKl" value="0.0" step="0.1" oninput="sy()" placeholder="殺%">
+            <input type="number" id="bAl" value="0.0" step="0.1" oninput="sy()"><input type="number" id="bKl" value="0.0" step="0.1" oninput="sy()">
         </div>
         <div class="grid">
             <div class="tag" onclick="tg('A')">弓</div>
-            <select id="fca" onchange="sy()"></select>
-            <select id="ta" onchange="sy()"></select>
+            <select id="fca" onchange="sy()"></select><select id="ta" onchange="sy()"></select>
             <div class="v-line"></div>
-            <input type="number" id="bAa" value="0.0" step="0.1" oninput="sy()" placeholder="攻%">
-            <input type="number" id="bKa" value="0.0" step="0.1" oninput="sy()" placeholder="殺%">
+            <input type="number" id="bAa" value="0.0" step="0.1" oninput="sy()"><input type="number" id="bKa" value="0.0" step="0.1" oninput="sy()">
         </div>
     </div>
 
     <div class="section">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
             <span class="title" style="margin:0;">出征数：<span id="tDisp">--</span></span>
             <span id="remDisp" style="font-size:10px; font-weight:900; color:var(--sub-accent);">残り：0%</span>
         </div>
-        <input type="range" id="tr" min="1000" max="1000000" step="1000" value="100000" oninput="sy()">
+        <div class="ctrl-row">
+            <button class="btn-s" onclick="st('tr',-1000)">−</button>
+            <input type="range" id="tr" min="1000" max="1000000" step="1000" value="100000" oninput="sy()">
+            <button class="btn-s" onclick="st('tr',1000)">＋</button>
+        </div>
         
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
-            <div>
-                <div style="font-size:9px; font-weight:bold; text-align:center;">盾 <span id="mI">割合</span></div>
-                <input type="number" id="iI" value="33" oninput="hi('I')">
-                <div id="sI" style="font-size:10px; text-align:center; font-weight:bold;"></div>
+        <div style="margin-top:10px;">
+            <div style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <div class="u-btn active" id="mI" onclick="tg('I')">割合</div>
+                        <input type="number" id="iI" value="33" oninput="hi('I')" style="width:70px;">
+                    </div>
+                    <div id="sI" style="font-weight:bold; font-size:11px;"></div>
+                </div>
+                <div class="ctrl-row">
+                    <button class="btn-s" onclick="st('iI',-1)">−</button>
+                    <input type="range" id="rI" min="0" max="100" value="33" oninput="sl('I')">
+                    <button class="btn-s" onclick="st('iI',1)">＋</button>
+                </div>
             </div>
-            <div>
-                <div style="font-size:9px; font-weight:bold; text-align:center;">槍 <span id="mL">割合</span></div>
-                <input type="number" id="iL" value="33" oninput="hi('L')">
-                <div id="sL" style="font-size:10px; text-align:center; font-weight:bold;"></div>
+            <div style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <div class="u-btn active" id="mL" onclick="tg('L')">割合</div>
+                        <input type="number" id="iL" value="33" oninput="hi('L')" style="width:70px;">
+                    </div>
+                    <div id="sL" style="font-weight:bold; font-size:11px;"></div>
+                </div>
+                <div class="ctrl-row">
+                    <button class="btn-s" onclick="st('iL',-1)">−</button>
+                    <input type="range" id="rL" min="0" max="100" value="33" oninput="sl('L')">
+                    <button class="btn-s" onclick="st('iL',1)">＋</button>
+                </div>
             </div>
-            <div>
-                <div style="font-size:9px; font-weight:bold; text-align:center;">弓 <span id="mA">割合</span></div>
-                <input type="number" id="iA" value="34" oninput="hi('A')">
-                <div id="sA" style="font-size:10px; text-align:center; font-weight:bold;"></div>
+            <div style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <div class="u-btn active" id="mA" onclick="tg('A')">割合</div>
+                        <input type="number" id="iA" value="34" oninput="hi('A')" style="width:70px;">
+                    </div>
+                    <div id="sA" style="font-weight:bold; font-size:11px;"></div>
+                </div>
+                <div class="ctrl-row">
+                    <button class="btn-s" onclick="st('iA',-1)">−</button>
+                    <input type="range" id="rA" min="0" max="100" value="34" oninput="sl('A')">
+                    <button class="btn-s" onclick="st('iA',1)">＋</button>
+                </div>
             </div>
         </div>
     </div>
@@ -144,9 +162,9 @@
         <span id="bDMG" style="font-size:11px; opacity:0.9;">推奨時の推定ダメ: 0</span>
     </div>
 
-    <button class="reset-btn" onclick="rs()">全てリセット</button>
+    <button class="reset-btn" onclick="rs()" style="width:100%; padding:10px; background:none; border:1px solid var(--border); color:#999; border-radius:20px; font-size:10px; cursor:pointer;">全てリセット</button>
 
-    <div class="log-section">
+    <div class="log-section" style="margin-top:10px; border-top:1px dashed var(--border); padding-top:8px;">
         <details>
             <summary style="font-size:10px; color:var(--sub-accent); cursor:pointer; font-weight:900;">📊 計算プロセスを確認</summary>
             <div class="log" id="log"></div>
@@ -156,18 +174,13 @@
 
 <script>
 const SPREADSHEET_API_URL = "https://script.google.com/macros/s/AKfycbwWEDwwO4vSFzdOkMY6NEbqIrd-DEREvKgUg5YZTFWPODvlVHsPChv5UtlMbM9u_mCD/exec";
-
 const D = {
     盾: {"なし":{T7:[7,7],T8:[8,8],T9:[9,9],T10:[10,10],T11:[12,12]},"1":{T10:[11,10],T11:[13,12]},"2":{T10:[12,11],T11:[14,13]},"3":{T10:[13,12],T11:[15,14]},"4":{T10:[13,13],T11:[15,15]},"5":{T10:[14,13],T11:[16,15]},"6":{T10:[14,13],T11:[17,16]},"7":{T10:[15,14],T11:[17,16]},"8":{T10:[15,15],T11:[18,17]},"9":{T10:[15,14],T11:[18,17]},"10":{T10:[16,15],T11:[19,18]}},
     槍: {"なし":{T7:[9,10],T8:[10,11],T9:[12,12],T10:[13,14],T11:[15,16]},"1":{T10:[14,15],T11:[16,17]},"2":{T10:[16,16],T11:[18,18]},"3":{T10:[17,17],T11:[19,19]},"4":{T10:[18,18],T11:[20,20]},"5":{T10:[20,19],T11:[22,22]},"6":{T10:[21,20],T11:[23,22]},"7":{T10:[22,21],T11:[24,24]},"8":{T10:[23,22],T11:[25,24]},"9":{T10:[24,22],T11:[27,25]},"10":{T10:[25,23],T11:[28,26]}},
     弓: {"なし":{T7:[9,10],T8:[10,11],T9:[12,12],T10:[14,15],T11:[16,17]},"1":{T10:[15,16],T11:[17,18]},"2":{T10:[17,17],T11:[19,19]},"3":{T10:[18,18],T11:[20,20]},"4":{T10:[19,19],T11:[21,21]},"5":{T10:[21,20],T11:[23,22]},"6":{T10:[22,21],T11:[24,23]},"7":{T10:[23,22],T11:[25,24]},"8":{T10:[24,23],T11:[26,25]},"9":{T10:[25,23],T11:[28,26]},"10":{T10:[26,24],T11:[30,27]}}
 };
-
-let memberData = { 
-    ruby: { tr: 100000, fc: "4", t: "T10" }, 
-    junk: { tr: 100000, fc: "5", t: "T10" } // じゃんくのデフォをT10に修正
-};
-let curK = "ruby", isP = {I:1, L:1, A:1}, cur = {I:0, L:0, A:0};
+let memberData = { ruby: { tr: 100000, fc: "4", t: "T10" }, junk: { tr: 100000, fc: "5", t: "T10" } };
+let memberKeys = ["ruby", "junk"], curIdx = 0, isP = {I:1, L:1, A:1}, cur = {I:0, L:0, A:0};
 
 function it() {
     const fcs = ["なし","1","2","3","4","5","6","7","8","9","10"], tiers = ["T7","T8","T9","T10","T11"];
@@ -178,24 +191,33 @@ function it() {
 }
 
 function apply() {
-    const c = memberData[curK];
+    const k = memberKeys[curIdx], c = memberData[k];
+    document.getElementById('editionLabel').innerText = (k === "ruby" ? "るびぃ" : "じゃんく") + "edition";
+    document.body.classList.toggle('junk-theme', k === "junk");
     document.getElementById('tr').value = c.tr;
     document.querySelectorAll('[id^="fc"]').forEach(s => s.value = c.fc);
     document.querySelectorAll('select[id^="t"]').forEach(s => s.value = c.t);
     sy();
 }
 
-function changeMember(v) {
-    curK = v;
-    document.body.classList.toggle('junk-theme', v === "junk");
-    apply();
+function cycleMember() { curIdx = (curIdx + 1) % memberKeys.length; apply(); }
+
+function st(id, v) { 
+    const el = document.getElementById(id); 
+    el.value = Math.max(0, parseInt(el.value) + v); 
+    if(id.startsWith('i')) document.getElementById('r'+id.slice(1)).value = el.value;
+    sy(); 
 }
+
+function sl(t) { document.getElementById('i'+t).value = document.getElementById('r'+t).value; sy(); }
 
 function tg(t) {
     isP[t] = !isP[t];
     const b = document.getElementById('m'+t), tot = parseInt(document.getElementById('tr').value);
     b.innerText = isP[t] ? "割合" : "人数";
     document.getElementById('i'+t).value = isP[t] ? Math.round(cur[t]/tot*100) : cur[t];
+    document.getElementById('r'+t).max = isP[t] ? 100 : tot;
+    document.getElementById('r'+t).value = document.getElementById('i'+t).value;
     sy();
 }
 
@@ -207,30 +229,28 @@ function sy() {
         const v = parseFloat(document.getElementById('i'+t).value) || 0;
         cur[t] = isP[t] ? Math.floor(tot * (v / 100)) : v;
         sumP += isP[t] ? v : Math.round(v/tot*100);
-        document.getElementById('s'+t).innerText = `→ ${cur[t].toLocaleString()}`;
+        document.getElementById('s'+t).innerText = `→ ${cur[t].toLocaleString()}人`;
+        document.getElementById('r'+t).value = v;
     });
     document.getElementById('remDisp').innerText = `残り：${Math.round(100-sumP)}%`;
     calc();
 }
 
-function hi(t) { sy(); }
+function hi(t) { document.getElementById('r'+t).value = document.getElementById('i'+t).value; sy(); }
 
 function calc() {
-    let lb = "<span class='log-head'>1. 基礎ステータス</span>", lc = "<span class='log-head'>2. バフ適用係数</span>", ld = "<span class='log-head'>3. 各兵種ダメージ</span>";
-    const tot = parseInt(document.getElementById('tr').value);
+    let lb = "1.基礎ステ / 2.係数 / 3.ダメージ", tot = parseInt(document.getElementById('tr').value);
     const process = (row, key, atkId, kilId) => {
         const fc = document.getElementById('fc'+row).value, t = document.getElementById('t'+row).value,
               b = (D[key][fc] && D[key][fc][t]) ? D[key][fc][t] : D[key]["なし"][t],
               a = parseFloat(document.getElementById(atkId).value)||0, k = parseFloat(document.getElementById(kilId).value)||0,
               coeff = b[0] * b[1] * (1 + a/100) * (1 + k/100), dmg = Math.sqrt(cur[row.toUpperCase()]) * coeff;
-        lb += `\n${key}(${t}/${fc}): 攻${b[0]}×守${b[1]}=${b[0]*b[1]}`;
-        lc += `\n${key}: 係数:${coeff.toFixed(1)}`;
-        ld += `\n${key}: ${Math.floor(dmg).toLocaleString()}`;
+        lb += `\n${key}: ${b[0]*b[1]} -> ${coeff.toFixed(1)} -> ${Math.floor(dmg).toLocaleString()}`;
         return {dmg: dmg, m: coeff};
     };
     const rI = process('i','盾','bAi','bKi'), rL = process('l','槍','bAl','bKl'), rA = process('a','弓','bAa','bKa');
     document.getElementById('resDmg').innerText = Math.floor(rI.dmg + rL.dmg + rA.dmg).toLocaleString();
-    document.getElementById('log').innerHTML = lb + lc + ld;
+    document.getElementById('log').innerText = lb;
     const sQ = rI.m**2 + rL.m**2 + rA.m**2;
     if(sQ > 0) {
         const pI = Math.round(rI.m**2/sQ*100), pL = Math.round(rL.m**2/sQ*100), pA = 100 - pI - pL;

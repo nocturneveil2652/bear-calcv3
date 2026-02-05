@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>熊ダメ計算機 v3.3</title>
+    <title>熊ダメ計算機 v3.4</title>
     <style>
         :root {
             --font-main: -apple-system, "Hiragino Sans", "Helvetica Neue", sans-serif;
@@ -43,15 +43,16 @@
         .section { border: 1px solid var(--border); padding: 8px; margin-bottom: 6px; border-radius: 8px; background: var(--input-bg); }
         .title { font-size: 10px; font-weight: 900; border-left: 4px solid var(--sub-accent); padding-left: 6px; display: block; margin-bottom: 6px; }
 
-        /* ラベル表示用 */
-        .label-row { display: grid; grid-template-columns: 35px 65px 55px 1px 1fr 1fr; gap: 5px; margin-bottom: 2px; }
+        /* カラム幅の設定：ここでサイズを調整しています */
+        /* 35px(タグ) 55px(火晶) 65px(Tier) 1px(線) 1fr(攻) 1fr(殺) */
+        .label-row { display: grid; grid-template-columns: 35px 55px 65px 1px 1fr 1fr; gap: 5px; margin-bottom: 2px; }
+        .grid { display: grid; grid-template-columns: 35px 55px 65px 1px 1fr 1fr; gap: 5px; align-items: center; margin-bottom: 4px; }
+        
         .label-text { font-size: 8px; font-weight: bold; text-align: center; color: var(--sub-accent); opacity: 0.8; }
-
-        .grid { display: grid; grid-template-columns: 35px 65px 55px 1px 1fr 1fr; gap: 5px; align-items: center; margin-bottom: 4px; }
         .v-line { background: var(--border); width: 1px; height: 24px; justify-self: center; }
         .tag { background: var(--sub-accent); color: #fff; font-size: 10px; text-align: center; padding: 8px 0; border-radius: 5px; font-weight: 900; cursor: pointer; }
         
-        input, select { font-family: var(--font-mono); border: 1.5px solid var(--border); border-radius: 6px; height: 34px; text-align: center; font-size: 14px; width: 100%; box-sizing: border-box; background: var(--input-bg); color: var(--main-text); }
+        input, select { font-family: var(--font-mono); border: 1.5px solid var(--border); border-radius: 6px; height: 34px; text-align: center; font-size: 13px; width: 100%; box-sizing: border-box; background: var(--input-bg); color: var(--main-text); }
         
         .ctrl-row { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
         .btn-s { background: var(--input-bg); border: 1.5px solid var(--sub-accent); color: var(--sub-accent); width: 34px; height: 34px; border-radius: 8px; font-weight: 900; font-size: 18px; cursor: pointer; flex-shrink: 0; }
@@ -73,7 +74,7 @@
 
 <div class="container">
     <header>
-        <h1>熊ダメ計算機 <span style="font-size: 12px; opacity: 0.6;">v3.3</span></h1>
+        <h1>熊ダメ計算機 <span style="font-size: 12px; opacity: 0.6;">v3.4</span></h1>
         <span class="sub-title" id="editionLabel" onclick="cycleMember()">るびぃedition</span>
     </header>
 
@@ -172,7 +173,7 @@
     <button onclick="rs()" style="width:100%; padding:10px; background:none; border:1px solid var(--border); color:#999; border-radius:20px; font-size:10px;">全てリセット</button>
 
     <div class="log-section" style="margin-top:10px; padding-top:8px;">
-        <details open>
+        <details>
             <summary style="font-size:10px; color:var(--sub-accent); cursor:pointer; font-weight:900;">📊 計算プロセスを確認</summary>
             <div class="log" id="log"></div>
         </details>
@@ -180,7 +181,6 @@
 </div>
 
 <script>
-// ズーム防止（ダブルタップ無効）
 document.addEventListener('touchstart', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
 let lastTouch = 0;
 document.addEventListener('touchend', (e) => {
@@ -218,12 +218,11 @@ function apply() {
 
 function cycleMember() { curIdx = (curIdx + 1) % memberKeys.length; apply(); }
 
-// 100%制御つき数値操作
 function st(id, v) { 
     const el = document.getElementById(id);
     if(id.startsWith('i') && isP[id.slice(1)]) {
         const others = ['I','L','A'].filter(t => t !== id.slice(1)).reduce((sum, t) => sum + (isP[t] ? parseInt(document.getElementById('i'+t).value) : 0), 0);
-        if(v > 0 && others + parseInt(el.value) >= 100) return; // 合計100%以上の加算を阻止
+        if(v > 0 && others + parseInt(el.value) >= 100) return;
     }
     el.value = Math.max(0, parseInt(el.value) + v); 
     if(id.startsWith('i')) document.getElementById('r'+id.slice(1)).value = el.value;

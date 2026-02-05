@@ -67,6 +67,18 @@ function sl(t) {
     document.getElementById('i'+t).value = val;
     hi(t); // 人数に変換して反映
 }
+// --- ここから追加 ---
+// 【制御】割合のプラスマイナスボタンを数値とスライダーに連動させる
+function st_pct(t, v) {
+    let input = document.getElementById('i'+t);
+    let val = Math.max(0, (parseInt(input.value) || 0) + v);
+    // スライダーのつまみ位置を数値に合わせる
+    document.getElementById('r'+t).value = val;
+    // スライダー制御関数(sl)を呼んで、100%制限と再計算を適用
+    sl(t);
+}
+// --- ここまで追加 ---
+
 
 // 【計算】オリジナル遵守のダメージ計算ロジック
 function calc() {
@@ -76,3 +88,4 @@ function calc() {
 
 // ページ読み込み完了時に初期化関数を呼ぶ
 window.onload = it;
+

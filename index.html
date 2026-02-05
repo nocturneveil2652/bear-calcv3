@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>熊ダメ計算機 v2.0.0</title>
+    <title>熊ダメ計算機 v3.1</title>
     <style>
         :root {
             --font-main: -apple-system, "Hiragino Sans", "Helvetica Neue", sans-serif;
@@ -35,54 +35,36 @@
         body { font-family: var(--font-main); font-size: 13px; color: var(--main-text); background: var(--bg); margin: 0; padding: 4px; transition: all 0.2s ease; }
         
         .container { 
-            max-width: 400px; margin: auto; background: var(--container-bg); padding: 8px; 
+            max-width: 420px; margin: auto; background: var(--container-bg); padding: 8px; 
             border-radius: 12px; display: flex; flex-direction: column; box-sizing: border-box;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
         header { 
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            min-height: 54px; border-bottom: 3px solid var(--accent); margin-bottom: 6px; padding: 4px 10px; 
+            display: flex; justify-content: space-between; align-items: center;
+            min-height: 50px; border-bottom: 3px solid var(--accent); margin-bottom: 6px; padding: 0 10px; 
             background: var(--header-bg); border-radius: 8px 8px 0 0; 
         }
-        h1 { font-size: 1.1rem; margin: 0; font-weight: 800; text-align: center; }
-        .sub-title { font-size: 11px; color: var(--sub-accent); cursor: pointer; text-decoration: underline; font-weight: bold; margin-top: 2px; align-self: flex-end; }
-        .ver { font-size: 14px; color: var(--accent); font-weight: bold; margin-left: 8px; opacity: 1; }
+        h1 { font-size: 1rem; margin: 0; font-weight: 800; }
+        .member-select { padding: 4px 8px; border-radius: 6px; border: 1.5px solid var(--sub-accent); background: var(--input-bg); color: var(--main-text); font-weight: bold; cursor: pointer; }
 
         .section { border: 1px solid var(--border); padding: 8px; margin-bottom: 6px; border-radius: 8px; background: var(--input-bg); }
         .title { font-size: 10px; font-weight: 900; border-left: 4px solid var(--sub-accent); padding-left: 6px; display: block; margin-bottom: 6px; }
-        .rem-pct { font-size: 10px; font-weight: 900; color: #fff; background: var(--sub-accent); padding: 2px 8px; border-radius: 10px; }
-
-        .grid { display: grid; grid-template-columns: 32px 65px 55px 1px 75px 75px; gap: 4px; align-items: center; margin-bottom: 4px; }
+        
+        /* 横幅を広くするためのグリッド再設計 */
+        .grid { display: grid; grid-template-columns: 35px 65px 55px 1px 1fr 1fr; gap: 5px; align-items: center; margin-bottom: 4px; }
         .v-line { background: var(--border); width: 1px; height: 24px; justify-self: center; }
-        .tag { background: var(--sub-accent); color: #fff; font-size: 10px; text-align: center; padding: 5px 0; border-radius: 5px; font-weight: 900; }
+        .tag { background: var(--sub-accent); color: #fff; font-size: 10px; text-align: center; padding: 8px 0; border-radius: 5px; font-weight: 900; cursor: pointer; }
         
         input, select { 
             font-family: var(--font-mono); border: 1.5px solid var(--border); border-radius: 6px; 
-            height: 34px; text-align: center; font-size: 14px; width: 100%; box-sizing: border-box; 
+            height: 34px; text-align: center; font-size: 13px; width: 100%; box-sizing: border-box; 
             background: var(--input-bg); color: var(--main-text); outline: none; 
         }
 
-        input[type="range"] { -webkit-appearance: none; background: var(--border); height: 6px; border-radius: 3px; margin: 12px 0; width: 100%; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: var(--accent); border-radius: 50%; border: 2.5px solid #fff; }
-
-        .u-btn { 
-            background: var(--input-bg); border: 1.5px solid var(--sub-accent); padding: 5px 0; 
-            font-size: 10px; border-radius: 15px; text-align: center; color: var(--sub-accent); 
-            font-weight: 900; cursor: pointer;
-        }
-        .u-btn.active { background: var(--sub-accent); color: #fff; }
-
         .res-box { border: 2.5px solid var(--accent); padding: 6px 10px; border-radius: 12px; text-align: center; margin-bottom: 8px; background: rgba(248, 187, 208, 0.05); }
-        #resDmg { font-family: var(--font-mono); font-size: 2rem; font-weight: 900; color: var(--dmg-color); line-height: 1.1; }
+        #resDmg { font-family: var(--font-mono); font-size: 2.2rem; font-weight: 900; color: var(--dmg-color); line-height: 1.1; }
 
-        .best-area { background: var(--sub-accent); color: #fff; padding: 8px; border-radius: 10px; text-align: center; margin-bottom: 6px; }
-        .best-txt { font-size: 13px; font-weight: 900; display: block; margin-bottom: 2px; }
-        .best-dmg { font-size: 11px; font-weight: 700; opacity: 0.95; font-family: var(--font-mono); }
-
-        .reset-btn { width: 100%; padding: 10px; background: none; border: 1px solid var(--border); color: #999; border-radius: 20px; font-size: 10px; cursor: pointer; }
-        
-        .log-section { margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 8px; }
         .log { background: rgba(128,128,128,0.04); padding: 10px; border-radius: 8px; white-space: pre-wrap; font-family: var(--font-mono); font-size: 10px; color: var(--main-text); border: 1px solid var(--border); line-height: 1.4; text-align: left; }
         .log-head { color: var(--sub-accent); font-weight: 900; margin: 6px 0 2px; display: block; border-bottom: 1px solid var(--border); }
     </style>
@@ -91,71 +73,82 @@
 
 <div class="container">
     <header>
-        <h1>熊ダメ計算機<span class="ver">v2.0.0</span></h1>
-        <span class="sub-title" id="editionLabel" onclick="toggleEdition()">るびぃedition</span>
+        <h1>熊ダメ計算機 <span style="color:var(--accent)">v3.1</span></h1>
+        <select id="memberSelector" class="member-select" onchange="changeMember(this.value)">
+            <option value="ruby">るびぃ ed.</option>
+            <option value="junk">じゃんく ed.</option>
+        </select>
     </header>
 
     <div class="section">
-        <span class="title">兵士設定 & 集結バフ</span>
+        <span class="title">兵士設定 & バフ（攻%/殺%）</span>
         <div class="grid">
-            <div class="tag">盾</div>
+            <div class="tag" onclick="tg('I')">盾</div>
             <select id="fci" onchange="sy()"></select>
             <select id="ti" onchange="sy()"></select>
             <div class="v-line"></div>
-            <input type="number" id="bAi" value="0.0" step="0.1" oninput="sy()">
-            <input type="number" id="bKi" value="0.0" step="0.1" oninput="sy()">
+            <input type="number" id="bAi" value="0.0" step="0.1" oninput="sy()" placeholder="攻%">
+            <input type="number" id="bKi" value="0.0" step="0.1" oninput="sy()" placeholder="殺%">
         </div>
         <div class="grid">
-            <div class="tag">槍</div>
+            <div class="tag" onclick="tg('L')">槍</div>
             <select id="fcl" onchange="sy()"></select>
             <select id="tl" onchange="sy()"></select>
             <div class="v-line"></div>
-            <input type="number" id="bAl" value="0.0" step="0.1" oninput="sy()">
-            <input type="number" id="bKl" value="0.0" step="0.1" oninput="sy()">
+            <input type="number" id="bAl" value="0.0" step="0.1" oninput="sy()" placeholder="攻%">
+            <input type="number" id="bKl" value="0.0" step="0.1" oninput="sy()" placeholder="殺%">
         </div>
         <div class="grid">
-            <div class="tag">弓</div>
+            <div class="tag" onclick="tg('A')">弓</div>
             <select id="fca" onchange="sy()"></select>
             <select id="ta" onchange="sy()"></select>
             <div class="v-line"></div>
-            <input type="number" id="bAa" value="0.0" step="0.1" oninput="sy()">
-            <input type="number" id="bKa" value="0.0" step="0.1" oninput="sy()">
+            <input type="number" id="bAa" value="0.0" step="0.1" oninput="sy()" placeholder="攻%">
+            <input type="number" id="bKa" value="0.0" step="0.1" oninput="sy()" placeholder="殺%">
         </div>
     </div>
 
     <div class="section">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span class="title" style="margin:0;">出征数：<span id="tDisp">100,000</span></span>
-            <span id="remDisp" class="rem-pct">残り：0%</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+            <span class="title" style="margin:0;">出征数：<span id="tDisp">--</span></span>
+            <span id="remDisp" style="font-size:10px; font-weight:900; color:var(--sub-accent);">残り：0%</span>
         </div>
         <input type="range" id="tr" min="1000" max="1000000" step="1000" value="100000" oninput="sy()">
         
-        <div style="display:grid; grid-template-columns: 32px 60px 85px 1fr; gap:6px; align-items:center; margin-bottom:6px;">
-            <div class="tag">盾</div><div class="u-btn active" id="mI">割合</div><input type="number" id="iI" value="33" oninput="hi('I')"><div id="sI" style="font-size:10px; font-weight:700;"></div>
-        </div>
-        <div style="display:grid; grid-template-columns: 32px 60px 85px 1fr; gap:6px; align-items:center; margin-bottom:6px;">
-            <div class="tag">槍</div><div class="u-btn active" id="mL">割合</div><input type="number" id="iL" value="33" oninput="hi('L')"><div id="sL" style="font-size:10px; font-weight:700;"></div>
-        </div>
-        <div style="display:grid; grid-template-columns: 32px 60px 85px 1fr; gap:6px; align-items:center; margin-bottom:6px;">
-            <div class="tag">弓</div><div class="u-btn active" id="mA">割合</div><input type="number" id="iA" value="34" oninput="hi('A')"><div id="sA" style="font-size:10px; font-weight:700;"></div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
+            <div>
+                <div style="font-size:9px; font-weight:bold; text-align:center;">盾 <span id="mI">割合</span></div>
+                <input type="number" id="iI" value="33" oninput="hi('I')">
+                <div id="sI" style="font-size:10px; text-align:center; font-weight:bold;"></div>
+            </div>
+            <div>
+                <div style="font-size:9px; font-weight:bold; text-align:center;">槍 <span id="mL">割合</span></div>
+                <input type="number" id="iL" value="33" oninput="hi('L')">
+                <div id="sL" style="font-size:10px; text-align:center; font-weight:bold;"></div>
+            </div>
+            <div>
+                <div style="font-size:9px; font-weight:bold; text-align:center;">弓 <span id="mA">割合</span></div>
+                <input type="number" id="iA" value="34" oninput="hi('A')">
+                <div id="sA" style="font-size:10px; text-align:center; font-weight:bold;"></div>
+            </div>
         </div>
     </div>
 
     <div class="res-box">
-        <span style="font-size:10px; font-weight:900;">推定合計ダメージ</span>
         <div id="resDmg">0</div>
+        <div style="font-size:10px; font-weight:900; opacity:0.8;">推定合計ダメージ</div>
     </div>
 
-    <div class="best-area">
-        <span class="best-txt" id="bT">---</span>
-        <span class="best-dmg" id="bDMG">推奨時の推定ダメ: 0</span>
+    <div style="background:var(--sub-accent); color:#fff; padding:8px; border-radius:10px; text-align:center; margin-bottom:6px;">
+        <span id="bT" style="font-size:13px; font-weight:900;">---</span><br>
+        <span id="bDMG" style="font-size:11px; opacity:0.9;">推奨時の推定ダメ: 0</span>
     </div>
 
-    <button class="reset-btn" onclick="rs()">数値をリセット</button>
+    <button class="reset-btn" onclick="rs()">全てリセット</button>
 
     <div class="log-section">
         <details>
-            <summary style="font-size:10px; color:var(--sub-accent); cursor:pointer; font-weight:900;">📊 詳細ログを確認</summary>
+            <summary style="font-size:10px; color:var(--sub-accent); cursor:pointer; font-weight:900;">📊 計算プロセスを確認</summary>
             <div class="log" id="log"></div>
         </details>
     </div>
@@ -170,40 +163,40 @@ const D = {
     弓: {"なし":{T7:[9,10],T8:[10,11],T9:[12,12],T10:[14,15],T11:[16,17]},"1":{T10:[15,16],T11:[17,18]},"2":{T10:[17,17],T11:[19,19]},"3":{T10:[18,18],T11:[20,20]},"4":{T10:[19,19],T11:[21,21]},"5":{T10:[21,20],T11:[23,22]},"6":{T10:[22,21],T11:[24,23]},"7":{T10:[23,22],T11:[25,24]},"8":{T10:[24,23],T11:[26,25]},"9":{T10:[25,23],T11:[28,26]},"10":{T10:[26,24],T11:[30,27]}}
 };
 
-let memberData = { ruby: { tr: 100000, fc: "4", t: "T10" }, junk: { tr: 100000, fc: "5", t: "T11" } };
-let currentKey = "ruby"; 
-let cur = {I:0, L:0, A:0};
+let memberData = { 
+    ruby: { tr: 100000, fc: "4", t: "T10" }, 
+    junk: { tr: 100000, fc: "5", t: "T10" } // じゃんくのデフォをT10に修正
+};
+let curK = "ruby", isP = {I:1, L:1, A:1}, cur = {I:0, L:0, A:0};
 
-async function it() {
-    const fcs = ["なし","1","2","3","4","5","6","7","8","9","10"];
-    const tiers = ["T7","T8","T9","T10","T11"];
-    document.querySelectorAll('[id^="fc"]').forEach(s => { fcs.forEach(f => s.add(new Option("FC "+f,f))); });
-    document.querySelectorAll('select[id^="t"]').forEach(s => { tiers.forEach(t => s.add(new Option(t,t))); });
-    
-    applySettings();
-
-    try {
-        const res = await fetch(SPREADSHEET_API_URL);
-        const data = await res.json();
-        if(data.ruby) memberData.ruby.tr = data.ruby;
-        if(data.junk) memberData.junk.tr = data.junk;
-        applySettings();
-    } catch (e) { console.error(e); }
+function it() {
+    const fcs = ["なし","1","2","3","4","5","6","7","8","9","10"], tiers = ["T7","T8","T9","T10","T11"];
+    document.querySelectorAll('[id^="fc"]').forEach(s => fcs.forEach(f => s.add(new Option("FC "+f,f))));
+    document.querySelectorAll('select[id^="t"]').forEach(s => tiers.forEach(t => s.add(new Option(t,t))));
+    apply();
+    fetch(SPREADSHEET_API_URL).then(r=>r.json()).then(d=>{ if(d.ruby)memberData.ruby.tr=d.ruby; if(d.junk)memberData.junk.tr=d.junk; apply(); });
 }
 
-function applySettings() {
-    const conf = memberData[currentKey];
-    document.getElementById('tr').value = conf.tr;
-    document.querySelectorAll('[id^="fc"]').forEach(s => s.value = conf.fc);
-    document.querySelectorAll('select[id^="t"]').forEach(s => s.value = conf.t);
+function apply() {
+    const c = memberData[curK];
+    document.getElementById('tr').value = c.tr;
+    document.querySelectorAll('[id^="fc"]').forEach(s => s.value = c.fc);
+    document.querySelectorAll('select[id^="t"]').forEach(s => s.value = c.t);
     sy();
 }
 
-function toggleEdition() {
-    currentKey = (currentKey === "ruby") ? "junk" : "ruby";
-    document.body.classList.toggle('junk-theme', currentKey === "junk");
-    document.getElementById('editionLabel').innerText = (currentKey === "ruby" ? "るびぃ" : "じゃんく") + "edition";
-    applySettings();
+function changeMember(v) {
+    curK = v;
+    document.body.classList.toggle('junk-theme', v === "junk");
+    apply();
+}
+
+function tg(t) {
+    isP[t] = !isP[t];
+    const b = document.getElementById('m'+t), tot = parseInt(document.getElementById('tr').value);
+    b.innerText = isP[t] ? "割合" : "人数";
+    document.getElementById('i'+t).value = isP[t] ? Math.round(cur[t]/tot*100) : cur[t];
+    sy();
 }
 
 function sy() {
@@ -211,9 +204,9 @@ function sy() {
     document.getElementById('tDisp').innerText = tot.toLocaleString();
     let sumP = 0;
     ['I','L','A'].forEach(t => {
-        const pct = parseFloat(document.getElementById('i'+t).value) || 0;
-        cur[t] = Math.floor(tot * (pct / 100));
-        sumP += pct;
+        const v = parseFloat(document.getElementById('i'+t).value) || 0;
+        cur[t] = isP[t] ? Math.floor(tot * (v / 100)) : v;
+        sumP += isP[t] ? v : Math.round(v/tot*100);
         document.getElementById('s'+t).innerText = `→ ${cur[t].toLocaleString()}`;
     });
     document.getElementById('remDisp').innerText = `残り：${Math.round(100-sumP)}%`;
@@ -223,28 +216,21 @@ function sy() {
 function hi(t) { sy(); }
 
 function calc() {
-    let lb = "<span class='log-head'>1. 基礎ステータス</span>\n";
-    let lc = "<span class='log-head'>2. バフ適用係数</span>\n";
-    let ld = "<span class='log-head'>3. 各兵種ダメージ</span>\n";
+    let lb = "<span class='log-head'>1. 基礎ステータス</span>", lc = "<span class='log-head'>2. バフ適用係数</span>", ld = "<span class='log-head'>3. 各兵種ダメージ</span>";
     const tot = parseInt(document.getElementById('tr').value);
-    
     const process = (row, key, atkId, kilId) => {
         const fc = document.getElementById('fc'+row).value, t = document.getElementById('t'+row).value,
               b = (D[key][fc] && D[key][fc][t]) ? D[key][fc][t] : D[key]["なし"][t],
-              a = parseFloat(document.getElementById(atkId).value)||0, k = parseFloat(document.getElementById(kilId).value)||0;
-        const base = b[0] * b[1];
-        const coeff = base * (1 + a/100) * (1 + k/100);
-        const dmg = Math.sqrt(cur[row.toUpperCase()]) * coeff;
-        lb += `${key}(${t}/${fc}): 攻${b[0]}×守${b[1]}=${base}\n`;
-        lc += `${key}: ${base}×攻バフ×殺バフ=係数:${coeff.toFixed(1)}\n`;
-        ld += `${key}: √${cur[row.toUpperCase()].toLocaleString()}×${coeff.toFixed(1)}=${Math.floor(dmg).toLocaleString()}\n`;
+              a = parseFloat(document.getElementById(atkId).value)||0, k = parseFloat(document.getElementById(kilId).value)||0,
+              coeff = b[0] * b[1] * (1 + a/100) * (1 + k/100), dmg = Math.sqrt(cur[row.toUpperCase()]) * coeff;
+        lb += `\n${key}(${t}/${fc}): 攻${b[0]}×守${b[1]}=${b[0]*b[1]}`;
+        lc += `\n${key}: 係数:${coeff.toFixed(1)}`;
+        ld += `\n${key}: ${Math.floor(dmg).toLocaleString()}`;
         return {dmg: dmg, m: coeff};
     };
-
     const rI = process('i','盾','bAi','bKi'), rL = process('l','槍','bAl','bKl'), rA = process('a','弓','bAa','bKa');
     document.getElementById('resDmg').innerText = Math.floor(rI.dmg + rL.dmg + rA.dmg).toLocaleString();
     document.getElementById('log').innerHTML = lb + lc + ld;
-
     const sQ = rI.m**2 + rL.m**2 + rA.m**2;
     if(sQ > 0) {
         const pI = Math.round(rI.m**2/sQ*100), pL = Math.round(rL.m**2/sQ*100), pA = 100 - pI - pL;
@@ -257,9 +243,8 @@ function calc() {
 function rs() {
     ['bAi','bKi','bAl','bKl','bAa','bKa'].forEach(id => document.getElementById(id).value="0.0");
     document.getElementById('iI').value=33; document.getElementById('iL').value=33; document.getElementById('iA').value=34;
-    applySettings();
+    apply();
 }
-
 window.onload = it;
 </script>
 </body>

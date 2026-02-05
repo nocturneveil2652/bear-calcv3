@@ -24,10 +24,37 @@ body.junk-theme {
     --dmg-color: #ffd740;
 }
 
-html, body { height: 100%; overflow: hidden; position: fixed; width: 100%; } 
-body { font-family: var(--font-main); font-size: 13px; color: var(--main-text); background: var(--bg); margin: 0; padding: 4px; transition: all 0.2s ease; touch-action: manipulation; }
+html, body { 
+    height: 100%; 
+    /* fixedとhiddenを削除し、iOSのバウンスを抑制する設定に変更 */
+    -webkit-overflow-scrolling: touch;
+} 
 
-.container { max-width: 400px; margin: auto; background: var(--container-bg); padding: 8px; border-radius: 12px; box-sizing: border-box; height: 100vh; overflow-y: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+body { 
+    font-family: var(--font-main); 
+    font-size: 13px; 
+    color: var(--main-text); 
+    background: var(--bg); 
+    margin: 0; 
+    padding: 4px; 
+    transition: all 0.2s ease; 
+    /* タップ時のズーム動作をブラウザレベルで抑制 */
+    touch-action: manipulation; 
+}
+
+.container { 
+    max-width: 400px; 
+    margin: auto; 
+    background: var(--container-bg); 
+    padding: 8px; 
+    border-radius: 12px; 
+    box-sizing: border-box; 
+    /* min-heightに変更して、中身が増えても伸びるようにする */
+    min-height: 100%; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    /* 下部に余白を追加して、最後のリセットボタンが隠れないようにする */
+    padding-bottom: 40px; 
+}
 
 header { display: flex; flex-direction: column; align-items: center; min-height: 54px; border-bottom: 3px solid var(--accent); margin-bottom: 6px; padding: 4px; background: var(--header-bg); border-radius: 8px 8px 0 0; }
 h1 { font-size: 1.1rem; margin: 0; font-weight: 800; }
@@ -78,3 +105,4 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20p
 .log-summary { font-size: 10px; color: var(--sub-accent); cursor: pointer; font-weight: 900; }
 .log { background: rgba(128,128,128,0.04); padding: 10px; border-radius: 8px; white-space: pre-wrap; font-family: var(--font-mono); font-size: 10px; color: var(--main-text); border: 1px solid var(--border); text-align: left; line-height: 1.5; }
 .log-head { color: var(--sub-accent); font-weight: 900; display: block; margin-top: 8px; border-bottom: 1px solid var(--border); }
+

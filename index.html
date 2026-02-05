@@ -47,9 +47,9 @@
             <span id="remDisp" class="rem-pct">残り：0%</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px; margin:4px 0;">
-            <button class="btn-s" onclick="st(-1000)">−</button>
-            <input type="range" id="tr" min="1000" max="1000000" step="1000" value="100000" oninput="sy()" style="flex:1;">
-            <button class="btn-s" onclick="st(1000)">＋</button>
+            <button class="btn-s" onclick="st(-10)">−</button>
+            <input type="range" id="tr" min="0" max="1000000" step="10" value="100000" oninput="sy()" style="flex:1;">
+            <button class="btn-s" onclick="st(10)">＋</button>
         </div>
 
         <div class="兵種別-area" style="margin-top:10px;">
@@ -86,3 +86,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
